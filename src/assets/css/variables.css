@@ -1,0 +1,28 @@
+:root {
+    --color-bg: #fff;
+    --color-bg-reverse: #191919;
+    --color-text: rgba(0, 0, 0, 0.8);
+    --color-text-on-bg-reverse: #fff;
+    --color-link: #B50A00;
+    --color-link-light: #E87D78;
+
+    --color-bg-action: var(--color-link);
+    --color-text-on-bg-action: #fff;
+
+    --color-bg-accent: #ffc46b;
+    --color-text-on-accent: var(--color-text);
+
+    --font-family: 'Work Sans', sans-serif;
+
+    --input-border: 2px solid var(--color-link-light);
+    --border-radius: 0.25rem;
+    --input-radius: 1.5rem;
+    --input-background: var(--color-bg);
+    --input-color: var(--color-text);
+    --input-focus-border: 2px solid var(--color-link);
+    --input-focus-outline: none;
+
+    --sidebar-width: 30vw;
+    --sidebar-min-width: 20rem;
+    --sidebar-max-width: 30rem;
+}
