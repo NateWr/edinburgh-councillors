@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
     --color-bg: #fff;
     --color-bg-reverse: #191919;
