@@ -1,5 +1,5 @@
 <template>
-    <div class="relative landscape:mb-8 landscape:last:mb-0">
+    <div class="relative mr-4 last:mr-0 landscape:mr-0 landscape:mb-8 landscape:last:mb-0">
         <h3 class="
             ec-ward-name
             mb-4
@@ -14,7 +14,17 @@
             <span class="bg-white whitespace-nowrap xl:text-lg">
                 {{ name }}
             </span>
-            <span class="text-xs font-normal text-gray-500 tracking-wide whitespace-nowrap xl:text-base">WARD {{ number }}</span>
+            <span class="
+                text-xs
+                font-normal
+                text-gray-700
+                tracking-wide
+                whitespace-nowrap
+                uppercase
+                xl:text-base
+            ">
+                Ward {{ number }}
+            </span>
         </h3>
         <ul class="flex m-0 p-0 list-none landscape:block">
             <li
