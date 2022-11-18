@@ -6,12 +6,11 @@
             flex
             justify-between
             items-center
-            bg-white
             font-semibold
             text-sm
             landscape:w-full
         ">
-            <span class="bg-white whitespace-nowrap xl:text-lg">
+            <span class="whitespace-nowrap xl:text-lg">
                 {{ name }}
             </span>
             <span class="
@@ -93,7 +92,7 @@ export default {
     display: flex;
     left: 0;
     width: calc(100vw - 2rem);
-    border-bottom: 2px solid var(--color-link-light);
+    border-bottom: 2px solid var(--color-link);
 }
 
 .ec-councillor {

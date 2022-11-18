@@ -225,6 +225,7 @@ body {
   stroke-width: 1.25;
   fill-opacity: 0;
   fill: var(--color-link);
+  transition: fill-opacity 0.1s;
 
   &:hover {
     fill-opacity: 0.1;
