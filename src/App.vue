@@ -71,7 +71,7 @@ export default {
         this.wards = r;
       })
       .catch(() => {
-        alert('An unexpected error occurred. Unable to load the ward boundaries.');
+        alert('An unexpected error occurred. Unable to load the ward councillors.');
       });
   }
 }
