@@ -20,25 +20,26 @@
         </template>
       </div>
     </div>
-    <div id="map" />
+    <ec-map
+      id="map"
+      class="map"
+      @ward:clicked="openWard"
+    />
   </div>
 </template>
 
 <script>
-import 'leaflet/dist/leaflet.css';
-import config from './config';
-import leaflet from 'leaflet';
 import EcCouncillors from './components/EcCouncillors.vue';
 import EcLogo from './components/EcLogo.vue';
+import EcMap from './components/EcMap.vue';
 import EcSearch from './components/EcSearch.vue';
-
-let map;
 
 export default {
   name: 'App',
   components: {
     EcCouncillors,
     EcLogo,
+    EcMap,
     EcSearch
   },
   data() {
@@ -124,39 +125,12 @@ export default {
   methods: {
     getWard(wardName) {
       return this.wards.find(ward => ward.name === wardName)
+    },
+    openWard(wardName) {
+      alert(wardName);
     }
   },
   mounted() {
-    map = leaflet.map('map').setView(
-      config.map.latlon,
-      config.map.zoom
-    );
-
-    leaflet.tileLayer(
-      config.map.tiles,
-      config.map.tilesConfig
-    ).addTo(map);
-
-    fetch(config.map.boundariesUrl)
-      .then(r => r.json())
-      .then(r => {
-          leaflet.geoJSON(
-              r.features,
-              {
-                  className: 'map-ward',
-                  onEachFeature(feature, layer) {
-                      layer.on({
-                          click() {
-                              alert(feature.properties.Ward_Name);
-                          }
-                      })
-                  }
-              }
-          ).addTo(map);
-    })
-    .catch(() => {
-      alert('An unexpected error occurred. Unable to load ward boundaries.');
-    });
   }
 }
 </script>
@@ -169,23 +143,6 @@ html,
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-#map {
-  position: absolute;
-  top: 4rem;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: var(--color-bg-accent);
-  color: var(--color-text-on-accent);
-  z-index: -1;
-
-  .leaflet-tile-container {
-    img {
-      filter: grayscale(65%);
-    }
-  }
 }
 
 .header {
@@ -220,16 +177,13 @@ body {
   overflow-x: scroll;
 }
 
-.map-ward {
-  stroke: var(--color-link);
-  stroke-width: 1.25;
-  fill-opacity: 0;
-  fill: var(--color-link);
-  transition: fill-opacity 0.1s;
-
-  &:hover {
-    fill-opacity: 0.1;
-  }
+.map {
+  position: absolute;
+  top: 4rem;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
 }
 
 @media (orientation: landscape) {
@@ -271,17 +225,8 @@ body {
     overflow: visible;
   }
 
-  #map {
+  .map {
     top: 0;
   }
 }
-
-/* @media (prefers-color-scheme: dark) {
-  #map {
-    .leaflet-tile-container img {
-      filter: grayscale(80%) invert(100%) contrast(80%);
-    }
-  }
-} */
-
 </style>
