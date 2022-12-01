@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <div class="controls">
+    <div class="controls" ref="controls">
       <div class="header">
         <div class="logo">
           <ec-logo href="#" />
@@ -9,13 +9,18 @@
           <ec-search />
         </div>
       </div>
-      <div class="councillors" v-if="currentWards.length">
+      <div
+        v-if="currentWards.length"
+        class="councillors"
+        ref="councillors"
+      >
         <h2 class="sr-only">Councillors</h2>
         <template v-for="ward in currentWards" :key="ward.name">
           <ec-councillors
             :councillors="ward.councillors"
             :name="ward.name"
             :number="ward.number"
+            :ref="ward.name"
           />
         </template>
       </div>
@@ -61,7 +66,16 @@ export default {
       return this.wards.find(ward => ward.name === wardName)
     },
     openWard(wardName) {
-      alert(wardName);
+      const isLandscape = window.innerWidth > window.innerHeight;
+      const $pos = this
+          .$refs[wardName][0]
+          .$el;
+      if (isLandscape) {
+        this.$refs.controls.scrollTo(0, $pos.offsetTop);
+      } else {
+        const paddingLeft = 16; // Fixes scroll off by 1rem
+        this.$refs.councillors.scrollTo($pos.offsetLeft - paddingLeft, 0);
+      }
     }
   },
   mounted() {
@@ -117,6 +131,9 @@ body {
   background: var(--color-bg);
   box-shadow: 0 0 40px rgba(0,0,0,0.3);
   overflow-x: scroll;
+  scroll-behavior: smooth;
+  scroll-margin-inline-start: 1rem;
+  scroll-margin-inline-end: 1rem;
 }
 
 .map {
@@ -129,29 +146,28 @@ body {
 }
 
 @media (orientation: landscape) {
+
+  .app {
+    display: grid;
+    grid-template-columns: var(--sidebar-min-width) auto;
+  }
+
   .controls {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: var(--sidebar-width);
-    min-width: var(--sidebar-min-width);
-    max-width: var(--sidebar-max-width);
     height: 100vh;
     background: var(--color-bg);
     overflow: scroll;
     box-shadow: 0 0 40px rgba(0,0,0,0.3);
+    scroll-behavior: smooth;
   }
 
   .header {
     position: fixed;
     display: flex;
     z-index: 1;
-    width: var(--sidebar-width);
+    width: var(--sidebar-min-width);
     height: 4rem;
-    min-width: var(--sidebar-min-width);
-    max-width: var(--sidebar-max-width);
   }
 
   .councillors {
@@ -168,7 +184,29 @@ body {
   }
 
   .map {
+    position: relative;
     top: 0;
+    z-index: 0;
+  }
+
+  @media (min-width: 1000px) {
+    .app {
+      grid-template-columns: var(--sidebar-width) auto;
+    }
+
+    .header  {
+      width: var(--sidebar-width);
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .app {
+      grid-template-columns: var(--sidebar-max-width) auto;
+    }
+
+    .header  {
+      width: var(--sidebar-max-width);
+    }
   }
 }
 </style>
