@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import config from './config';
 import EcCouncillors from './components/EcCouncillors.vue';
 import EcLogo from './components/EcLogo.vue';
 import EcMap from './components/EcMap.vue';
@@ -45,74 +46,7 @@ export default {
   data() {
     return {
       currentWardName: '',
-      wards: [
-        {
-          name: "Leith Walk",
-          number: 12,
-          councillors: [
-            {
-              name: 'Kevin Lang Kevin Lang Kevin Lang ',
-              email: 'kevin.lang@edinburgh.gov.uk',
-              phone: '0131 529 4389',
-              image: '/images/kevin-lang.jpg',
-              party: 'Scottish Liberal Democrats Liberal Democrats',
-              icon: 'party-sld.png',
-              url: 'https://democracy.edinburgh.gov.uk/mgUserInfo.aspx?UID=115'
-            },
-            {
-              name: 'Kevin Lang',
-              email: 'kevin.lang@edinburgh.gov.uk',
-              phone: '0131 529 4389',
-              image: '/images/kevin-lang.jpg',
-              party: 'Scottish Liberal Democrats',
-              icon: 'party-sld.png',
-              url: 'https://democracy.edinburgh.gov.uk/mgUserInfo.aspx?UID=115'
-            },
-            {
-              name: 'Kevin Lang',
-              email: 'kevin.lang@edinburgh.gov.uk',
-              phone: '0131 529 4389',
-              image: '/images/kevin-lang.jpg',
-              party: 'Scottish Liberal Democrats',
-              icon: 'party-sld.png',
-              url: 'https://democracy.edinburgh.gov.uk/mgUserInfo.aspx?UID=115'
-            }
-          ]
-        },
-        {
-          name: "ABCD",
-          number: 13,
-          councillors: [
-            {
-              name: 'Lorem Ipsum',
-              email: 'kevin.lang@edinburgh.gov.uk',
-              phone: '0131 529 4389',
-              image: '/images/kevin-lang.jpg',
-              party: 'Scottish Liberal Democrats Liberal Democrats',
-              icon: 'party-sld.png',
-              url: 'https://democracy.edinburgh.gov.uk/mgUserInfo.aspx?UID=115'
-            },
-            {
-              name: 'Dolor Sit Amet Lorem Ipsum',
-              email: 'kevin.lang@edinburgh.gov.uk',
-              phone: '0131 529 4389',
-              image: '/images/kevin-lang.jpg',
-              party: 'Scottish Liberal Democrats',
-              icon: 'party-sld.png',
-              url: 'https://democracy.edinburgh.gov.uk/mgUserInfo.aspx?UID=115'
-            },
-            {
-              name: 'Kevin Lang',
-              email: 'kevin.lang@edinburgh.gov.uk',
-              phone: '0131 529 4389',
-              image: '/images/kevin-lang.jpg',
-              party: 'Scottish Liberal Democrats',
-              icon: 'party-sld.png',
-              url: 'https://democracy.edinburgh.gov.uk/mgUserInfo.aspx?UID=115'
-            }
-          ]
-        }
-      ]
+      wards: []
     }
   },
   computed: {
@@ -131,6 +65,14 @@ export default {
     }
   },
   mounted() {
+    fetch(config.map.councillorsUrl)
+      .then(r => r.json())
+      .then(r => {
+        this.wards = r;
+      })
+      .catch(() => {
+        alert('An unexpected error occurred. Unable to load the ward boundaries.');
+      });
   }
 }
 </script>
