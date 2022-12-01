@@ -58,6 +58,11 @@ describe('Data Collection', () => {
             w => w.name === name && w.number === number
           )
 
+          // Fix typo on Edinburgh govt website
+          if (name === 'Fountainbridge/ Craiglockhart') {
+            name = 'Fountainbridge / Craiglockhart';
+          }
+
           if (!ward) {
             ward = {
               name,
