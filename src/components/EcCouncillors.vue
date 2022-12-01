@@ -31,7 +31,10 @@
                 :key="councillor.name"
                 class="ec-councillor grid rounded mr-4 last:mr-0 overflow-hidden landscape:mr-0 landscape:mb-4"
             >
-                <img class="ec-councillor-image" :src="councillor.image" />
+                <img
+                    class="ec-councillor-image"
+                    :src="councillor.image ?? '/images/councillor-no-portrait.png'"
+                />
                 <div class="ec-councillor-details">
                     <h3 class="font-bold mb-1 leading-4 xl:text-xl xl:leading-5 xl:mb-0">
                         {{ councillor.name }}
@@ -189,7 +192,7 @@ export default {
         height: auto;
     }
 
-    @media (min-width: 1200px) {
+    @media (min-width: 1280px) {
 
         .ec-councillor {
             grid-template-columns: 8rem auto;
