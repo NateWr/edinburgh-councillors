@@ -2,10 +2,12 @@
   "name": "edinburgh-councillors",
   "version": "0.1.0",
   "private": true,
+  "description": "An online tool to find your local Edinburgh ward councillors.",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test": "npx cypress run; spd-say done"
   },
   "dependencies": {
     "core-js": "^3.8.3",
@@ -18,6 +20,7 @@
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "cypress": "^11.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
     "postcss-css-variables": "^0.18.0",
