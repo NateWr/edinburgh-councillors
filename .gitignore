@@ -4,6 +4,7 @@ node_modules
 cypress/screenshots
 cypress/videos
 .vscode
+info.txt
 
 # local env files
 .env.local
