@@ -54,14 +54,14 @@ describe('Data Collection', () => {
           var number = parseInt(parts[0].replace('WardWard ', '')); // hidden text "Ward"
           var name = parts[1];
 
-          var ward = wards.find(
-            w => w.name === name && w.number === number
-          )
-
           // Fix typo on Edinburgh govt website
           if (name === 'Fountainbridge/ Craiglockhart') {
             name = 'Fountainbridge / Craiglockhart';
           }
+
+          var ward = wards.find(
+            w => w.name === name && w.number === number
+          )
 
           if (!ward) {
             ward = {
