@@ -134,53 +134,6 @@ export default {
     overflow: hidden;
 }
 
-.ec-councillor-action {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 0.85rem;
-    height: 2rem;
-    color: var(--color-text-on-bg-action);
-    background: transparent;
-    border: none;
-
-    svg {
-        width: 0.75rem;
-        height: auto;
-
-        path {
-            fill: var(--color-text-on-bg-action);
-        }
-    }
-
-    + .ec-councillor-action {
-        border-left: 1px solid #db3228;
-    }
-
-    &:hover {
-        background: #ff554b;
-    }
-
-    &:focus {
-        outline: 1px solid var(--color-text-on-bg-action);
-        outline-offset: -2px;
-    }
-
-    &:first-child {
-        border-top-left-radius: var(--border-radius);
-        border-bottom-left-radius: var(--border-radius);
-    }
-
-    &:last-child {
-        border-top-right-radius: var(--border-radius);
-        border-bottom-right-radius: var(--border-radius);
-    }
-}
-
-.ec-councillor-action-email svg {
-    width: 0.85rem;
-}
-
 @media (orientation: landscape) {
 
     .ec-councillor {
