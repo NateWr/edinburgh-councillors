@@ -5,94 +5,116 @@
  */
 describe('Data Collection', () => {
 
-    it('Get councillor details', () => {
+  var wards = [];
 
-      var wards = [];
+  it('Get councillor details', () => {
 
-      cy.visit('https://democracy.edinburgh.gov.uk/mgMemberIndex.aspx?VW=TABLE&PIC=1&FN=WARD');
+    cy.visit('https://democracy.edinburgh.gov.uk/mgMemberIndex.aspx?VW=TABLE&PIC=1&FN=WARD');
 
-      cy.get('#mgTable1 tbody tr')
+    cy.get('#mgTable1 tbody tr')
 
-        /**
-         * Get the data for each councillor
-         */
-        .each($row => {
-          var councillor = {};
+      /**
+       * Get the data for each councillor
+       */
+      .each($row => {
+        var councillor = {};
 
-          var $detailsColumn = $row.find('td:eq(1)');
-          var $link = $detailsColumn.find('a[title^="Link to details of Councillor"]');
+        var $detailsColumn = $row.find('td:eq(1)');
+        var $link = $detailsColumn.find('a[title^="Link to details of Councillor"]');
 
-          councillor.url = $link.prop('href');
+        councillor.url = $link.prop('href');
 
-          councillor.name = $link
-            .text()
-            .replace('Councillor', '')
-            .trim();
+        councillor.name = $link
+          .text()
+          .replace('Councillor', '')
+          .trim();
 
-          councillor.phone = $detailsColumn
-            .find('p:contains("0131")')
-            .text()
-            .replace(/[^0-9]/g, '');
+        councillor.phone = $detailsColumn
+          .find('p:contains("0131")')
+          .text()
+          .replace(/[^0-9]/g, '');
 
-          councillor.email = $detailsColumn
-            .find('a[href^="mailto"]')
-            .attr('href')
-            .replace('mailto:', '')
-            .trim();
+        councillor.email = $detailsColumn
+          .find('a[href^="mailto"]')
+          .attr('href')
+          .replace('mailto:', '')
+          .trim();
 
-          councillor.party = $row
-            .find('td:eq(2)')
-            .text()
-            .replace('Political party', '') // hidden text
-            .trim();
+        councillor.party = $row
+          .find('td:eq(2)')
+          .text()
+          .replace('Political party', '') // hidden text
+          .trim();
 
-          var parts = $row
-            .find('td:eq(3)')
-            .text()
-            .trim()
-            .split(' - ');
-          var number = parseInt(parts[0].replace('WardWard ', '')); // hidden text "Ward"
-          var name = parts[1];
+        var parts = $row
+          .find('td:eq(3)')
+          .text()
+          .trim()
+          .split(' - ');
+        var number = parseInt(parts[0].replace('Ward ', '')); // hidden text "Ward"
+        var name = parts[1];
 
-          // Fix typo on Edinburgh govt website
-          if (name === 'Fountainbridge/ Craiglockhart') {
-            name = 'Fountainbridge / Craiglockhart';
-          }
+        // Fix typo on Edinburgh govt website
+        if (name === 'Fountainbridge/ Craiglockhart') {
+          name = 'Fountainbridge / Craiglockhart';
+        }
 
-          var ward = wards.find(
-            w => w.name === name && w.number === number
-          )
+        var ward = wards.find(
+          w => w.name === name && w.number === number
+        )
 
-          if (!ward) {
-            ward = {
-              name,
-              number,
-              councillors: []
-            };
-            wards.push(ward);
-          }
+        if (!ward) {
+          ward = {
+            name,
+            number,
+            councillors: []
+          };
+          wards.push(ward);
+        }
 
-          ward.councillors.push(councillor);
-        })
+        ward.councillors.push(councillor);
 
-        /**
-         * Order wards and councillors alphanumerically
-         */
-        .then(() => {
+      })
+
+      /**
+       * Order wards and councillors alphanumerically
+       */
+      .then(() => {
+        cy.then(() => {
           wards
             .sort((a, b) => a.number - b.number)
             .forEach(function(ward, i) {
-              ward.councillors = ward
+              wards[i].councillors = ward
                 .councillors
                 .sort((a, b) => a.name.localeCompare(b.name));
             });
         })
+      })
 
-        /**
-         * Save the data to a json file
-         */
-        .then(() => {
-          cy.writeFile('public/councillors.json', JSON.stringify(wards));
-        })
-    })
+      .then(() => {
+        wards
+          .forEach((ward, w) => {
+            ward
+              .councillors
+              .forEach((councillor, c) => {
+                cy.visit(councillor.url)
+                  .then(() => {
+                    cy.get('.mgBigPhoto img')
+                      .then($el => {
+                        wards[w]
+                          .councillors[c]
+                          .photo = $el.prop('src');
+                      })
+                    })
+                })
+          });
+      })
+
+      /**
+       * Save the data to a json file
+       */
+      .then(() => {
+        cy.writeFile('public/councillors.json', JSON.stringify(wards));
+      })
   })
+})

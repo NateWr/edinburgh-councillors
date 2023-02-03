@@ -33,7 +33,7 @@
             >
                 <img
                     class="ec-councillor-image"
-                    :src="councillor.image ?? '/images/councillor-no-portrait.png'"
+                    :src="councillor.photo ?? '/images/councillor-no-portrait.png'"
                 />
                 <div class="ec-councillor-details">
                     <h3 class="font-bold mb-1 leading-4 xl:text-xl xl:leading-5 xl:mb-0">

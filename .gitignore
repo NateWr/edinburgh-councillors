@@ -5,6 +5,7 @@ cypress/screenshots
 cypress/videos
 .vscode
 info.txt
+src/photos/*.*
 
 # local env files
 .env.local
