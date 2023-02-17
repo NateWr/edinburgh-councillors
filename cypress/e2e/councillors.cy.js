@@ -51,7 +51,7 @@ describe('Data Collection', () => {
           .text()
           .trim()
           .split(' - ');
-        var number = parseInt(parts[0].replace('Ward ', '')); // hidden text "Ward"
+        var number = parseInt(parts[0].replace('WardWard ', '')); // hidden text "Ward"
         var name = parts[1];
 
         // Fix typo on Edinburgh govt website
@@ -67,7 +67,7 @@ describe('Data Collection', () => {
           ward = {
             name,
             number,
-            councillors: []
+            councillors: [],
           };
           wards.push(ward);
         }
@@ -91,6 +91,9 @@ describe('Data Collection', () => {
         })
       })
 
+      /**
+       * Get photos of councillors
+       */
       .then(() => {
         wards
           .forEach((ward, w) => {
