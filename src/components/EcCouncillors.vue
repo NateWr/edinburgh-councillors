@@ -1,3 +1,18 @@
+<script>
+import EcAction from './EcAction.vue';
+
+export default {
+    components: {
+        EcAction
+    },
+    props: {
+        name: String,
+        number: Number,
+        councillors: Array
+    }
+}
+</script>
+
 <template>
     <div class="relative mr-4 last:mr-0 landscape:mr-0 landscape:mb-8 landscape:last:mb-0">
         <h3 class="
@@ -78,21 +93,6 @@
         </ul>
     </div>
 </template>
-
-<script>
-import EcAction from './EcAction.vue';
-
-export default {
-    components: {
-        EcAction
-    },
-    props: {
-        name: String,
-        number: Number,
-        councillors: Array
-    }
-}
-</script>
 
 <style lang="postcss">
 @import '../assets/css/variables.css';

@@ -1,8 +1,12 @@
+<script>
+export default {
+  props: ['search'],
+  emits: ['update:search'],
+}
+</script>
+
 <template>
-  <div
-    class="ec-search"
-    :class="{'ec-search--is-focused': isFocused}"
-  >
+  <div class="ec-search">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
       <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 256c-35.3 0-64-28.7-64-64s28.7-64 64-64s64 28.7 64 64s-28.7 64-64 64z"/>
     </svg>
@@ -10,22 +14,11 @@
       type="search"
       name="search"
       placeholder="Find by postcode"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
+      :value="search"
+      @input="$emit('update:search', $event.target.value)"
     >
   </div>
 </template>
-
-<script>
-export default {
-  data() {
-    return {
-      isFocused: false
-    }
-  }
-}
-</script>
-
 
 <style lang="postcss">
 @import '../assets/css/variables.css';
@@ -63,7 +56,7 @@ export default {
   }
 }
 
-.ec-search--is-focused {
+.ec-search:focus-within {
   svg path {
     fill: var(--color-link);
   }

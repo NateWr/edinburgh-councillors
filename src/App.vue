@@ -1,71 +1,40 @@
-<template>
-  <div class="app">
-    <div class="controls" ref="controls">
-      <div class="header">
-        <div class="logo">
-          <ec-logo href="#" />
-        </div>
-        <div class="search">
-          <ec-search />
-        </div>
-      </div>
-      <div
-        v-if="currentWards.length"
-        class="councillors"
-        ref="councillors"
-      >
-        <h2 class="sr-only">Councillors</h2>
-        <template v-for="ward in currentWards" :key="ward.name">
-          <ec-councillors
-            :councillors="ward.councillors"
-            :name="ward.name"
-            :number="ward.number"
-            :ref="ward.name"
-          />
-        </template>
-      </div>
-    </div>
-    <ec-map
-      id="map"
-      class="map"
-      @ward:clicked="openWard"
-    />
-  </div>
-</template>
-
 <script>
 import config from './config';
+import debounce from 'debounce';
+import { parse } from 'csv-parse/browser/esm/sync';
+import 'leaflet/dist/leaflet.css';
+import leaflet from 'leaflet';
 import EcCouncillors from './components/EcCouncillors.vue';
 import EcLogo from './components/EcLogo.vue';
-import EcMap from './components/EcMap.vue';
 import EcSearch from './components/EcSearch.vue';
+
+let locationIcon;
+let map;
+let marker;
+let postcodes = [];
 
 export default {
   name: 'App',
   components: {
     EcCouncillors,
     EcLogo,
-    EcMap,
     EcSearch
   },
   data() {
     return {
-      currentWardName: '',
-      wards: []
-    }
-  },
-  computed: {
-    currentWards() {
-      return this.currentWardName
-        ? [this.getWard(this.currentWardName)].filter()
-        : this.wards;
+      currentWardId: '',
+      postcode: '',
+      wards: [],
+      warning: '',
     }
   },
   methods: {
-    getWard(wardName) {
-      return this.wards.find(ward => ward.name === wardName)
+
+    getPostcodeRecord(postcode) {
+      return postcodes.find(p => p.Postcode === postcode);
     },
-    openWard(wardName) {
+
+    scrollToCouncillors(wardName) {
       const isLandscape = window.innerWidth > window.innerHeight;
       const $pos = this
           .$refs[wardName][0]
@@ -76,10 +45,147 @@ export default {
         const paddingLeft = 16; // Fixes scroll off by 1rem
         this.$refs.councillors.scrollTo($pos.offsetLeft - paddingLeft, 0);
       }
-    }
+    },
+
+    searchChanged: debounce(function(postcode) {
+      this.warning = '';
+
+      if (!postcode) {
+        this.resetZoom();
+        return;
+      }
+
+      if (postcode !== postcode.replace(/[^0-9a-z\s]/gi, '')) {
+        this.warning = 'Letters and numbers only, like EH1 1LR';
+        return;
+      }
+
+      const trimmed = postcode
+        .trim()
+        .replace(/[^0-9a-z]/gi, '');
+
+      if (
+        (trimmed.length === 1 && trimmed.toUpperCase() !== 'E')
+        ||
+        (trimmed.length > 1 && trimmed.substring(0, 2).toUpperCase() !== 'EH')
+      ) {
+        this.warning = 'Enter an EH postcode';
+        return;
+      }
+
+      if (trimmed.length < 6) {
+        return;
+      }
+
+      if (trimmed.length > 7) {
+        this.warning = 'Woops, that\'s too long';
+        return;
+      }
+
+      const formatted =
+        trimmed
+          .substr(0, trimmed.length - 3)
+          .toUpperCase()
+        + ' '
+        + trimmed
+          .substring(trimmed.length - 3)
+          .toUpperCase();
+
+      const record = this.getPostcodeRecord(formatted);
+
+      if (!record) {
+        this.warning = 'Couldn\'t find that postcode';
+        return;
+      }
+
+      this.postcode = record.Postcode;
+
+      let wardLayer = null;
+      map.eachLayer(layer => {
+        if (layer.feature && layer.feature.properties.Ward_Name === record.Ward) {
+          wardLayer = layer;
+        }
+      });
+
+      if (!wardLayer) {
+        alert('Unable to find the correct ward for that postcode.');
+      }
+
+      this.showWard(wardLayer);
+      this.showPostcode(record.Postcode, record.Latitude, record.Longitude);
+
+    }, 250),
+
+    showWard(layer) {
+      this.clearHighlighted();
+      window.console.log(layer);
+      this.currentWardId = layer.feature.properties.Ward_Code;
+      map.fitBounds(layer.getBounds());
+      this.scrollToCouncillors(layer.feature.properties.Ward_Name);
+      layer.setStyle({
+        fillOpacity: 0.4,
+      });
+    },
+
+    clearHighlighted() {
+      map.eachLayer(layer => {
+        if (layer.feature) {
+          layer.setStyle({fillOpacity: 0});
+        }
+      });
+      if (marker) {
+        map.removeLayer(marker);
+      }
+    },
+
+    showPostcode(postcode, lat, lon) {
+      marker = leaflet
+        .marker([lat, lon], {icon: locationIcon})
+        .addTo(map);
+    },
+
+    resetZoom() {
+      this.currentWardId = '';
+      this.clearHighlighted();
+      map.setView(
+        config.map.latlon,
+        config.map.zoom
+      );
+    },
   },
   mounted() {
-    fetch(config.map.councillorsUrl)
+    var self = this;
+
+    map = leaflet.map('map').setView(
+      config.map.latlon,
+      config.map.zoom
+    );
+
+    leaflet.tileLayer(
+      config.map.tiles,
+      config.map.tilesConfig
+    ).addTo(map);
+
+    locationIcon = leaflet.divIcon({
+      html: `
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="60"
+            height="60"
+            viewBox="0 0 395.71 395.71"
+          >
+            <path d="M197.849,0C122.131,0,60.531,61.609,60.531,137.329c0,72.887,124.591,243.177,129.896,250.388l4.951,6.738
+              c0.579,0.792,1.501,1.255,2.471,1.255c0.985,0,1.901-0.463,2.486-1.255l4.948-6.738c5.308-7.211,129.896-177.501,129.896-250.388
+              C335.179,61.609,273.569,0,197.849,0z M197.849,88.138c27.13,0,49.191,22.062,49.191,49.191c0,27.115-22.062,49.191-49.191,49.191
+              c-27.114,0-49.191-22.076-49.191-49.191C148.658,110.2,170.734,88.138,197.849,88.138z"/>
+          </svg>
+        `,
+      className: 'ec-map-location',
+      iconSize: [60, 60],
+      iconAnchor: [30, 60],
+    });
+
+    fetch(config.councillorsUrl)
       .then(r => r.json())
       .then(r => {
         this.wards = r;
@@ -87,9 +193,105 @@ export default {
       .catch(() => {
         alert('An unexpected error occurred. Unable to load the ward councillors.');
       });
+
+    fetch(config.postcodesUrl)
+      .then(r => r.text())
+      .then(r => {
+        postcodes = parse(r, {
+          columns: true,
+          skip_empty_lines: true
+        });
+      })
+      .catch(() => {
+        alert('An unexpected error occurred. Unable to load postcodes.');
+      });
+
+    fetch(config.map.boundariesUrl)
+      .then(r => r.json())
+      .then(r => {
+        leaflet.geoJSON(
+          r.features,
+          {
+            style() {
+              return {
+                color: '#E87D78',
+                strokeWidth: 1.25,
+                fillOpacity: 0,
+                fillColor: '#E87D78',
+                transition: 'fill-opacity 0.1s',
+              }
+            },
+            onEachFeature(feature, layer) {
+              layer.on({
+                mouseover(e) {
+                  if (feature.properties.Ward_Code === self.currentWardId) {
+                    return;
+                  }
+                  e.target.setStyle({
+                    fillOpacity: 0.2,
+                  });
+                },
+                mouseout(e) {
+                  if (feature.properties.Ward_Code === self.currentWardId) {
+                    return;
+                  }
+                  e.target.setStyle({
+                    fillOpacity: 0
+                  });
+                },
+                click(e) {
+                  self.showWard(e.target);
+                }
+              })
+            }
+          }
+        ).addTo(map);
+    })
+    .catch(() => {
+      alert('An unexpected error occurred. Unable to load the ward boundaries.');
+    });
+  },
+  watch: {
+    postcode(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.searchChanged(newVal);
+      }
+    }
   }
 }
 </script>
+
+<template>
+  <div class="app">
+    <div class="controls" ref="controls">
+      <div class="header">
+        <div class="logo">
+          <ec-logo href="#" />
+        </div>
+        <div class="search">
+          <ec-search v-model:search="postcode"/>
+          <p>{{ this.warning }}</p>
+        </div>
+      </div>
+      <div
+        v-if="wards.length"
+        class="councillors"
+        ref="councillors"
+      >
+        <h2 class="sr-only">Councillors</h2>
+        <template v-for="ward in wards" :key="ward.name">
+          <ec-councillors
+            :councillors="ward.councillors"
+            :name="ward.name"
+            :number="ward.number"
+            :ref="ward.name"
+          />
+        </template>
+      </div>
+    </div>
+    <div id="map" class="map" />
+  </div>
+</template>
 
 <style lang="postcss">
 @import 'assets/css/fonts.css';
@@ -143,6 +345,14 @@ body {
   left: 0;
   right: 0;
   z-index: -1;
+  background: var(--color-bg-accent);
+  color: var(--color-text-on-accent);
+
+  .leaflet-tile-container {
+    img {
+      filter: grayscale(65%);
+    }
+  }
 }
 
 @media (orientation: landscape) {
