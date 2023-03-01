@@ -1,7 +1,7 @@
-const fs = require('fs');
-const http = require('http');
-const https = require('https');
-const sharp = require('sharp');
+import fs from 'fs';
+import http from 'http';
+import https from 'https';
+import sharp from 'sharp';
 
 /**
  * Downloads file from remote HTTP[S] host and puts its contents to the
