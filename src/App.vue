@@ -24,6 +24,7 @@ export default {
     return {
       currentWardId: '',
       postcode: '',
+      started: false,
       wards: [],
       warning: '',
     }
@@ -292,17 +293,58 @@ export default {
       </div>
     </div>
     <div id="map" class="map" />
+    <div v-if="started" class="modal__bg">
+      <div class="modal">
+        <h1>
+          👋 Hiya!
+        </h1>
+        <p>
+          This is a little something I made for my portfolio
+           in early 2023. The data may be out of date. Find your current ward councillors on
+          <a href="https://democracy.edinburgh.gov.uk/mgMemberIndex.aspx" target="_blank" rel="noopener noreferrer">edinburgh.gov.uk</a>.
+        </p>
+        <p>
+          If you don't know any Edinburgh postcodes, try EH1 1HZ, EH7 4DB or EH15 1AA.
+        </p>
+        <button @click="started = true">
+          Ok, got it!
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <style lang="postcss">
+@import 'modern-css-reset';
 @import 'assets/css/fonts.css';
 @import 'assets/css/variables.css';
 
 html,
 body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-family);
+
+}
+
+a {
+  font-weight: 700;
+  color: var(--color-link);
+  text-decoration: underline;
+
+  &:hover {
+    color: var(--color-link-light);
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .header {
@@ -338,6 +380,7 @@ body {
   scroll-behavior: smooth;
   scroll-margin-inline-start: 1rem;
   scroll-margin-inline-end: 1rem;
+  z-index: 1;
 }
 
 .map {
@@ -346,13 +389,53 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: 0;
   background: var(--color-bg-accent);
   color: var(--color-text-on-accent);
+}
 
-  .leaflet-tile-container {
-    img {
-      filter: grayscale(65%);
+.leaflet-tile-container {
+
+  & img {
+    filter: grayscale(65%);
+  }
+}
+
+.modal__bg {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+}
+
+.modal {
+  width: 30rem;
+  max-width: 90%;
+  padding: 2rem;
+  background: var(--color-bg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 3rem rgba(0,0,0,0.5);
+
+  & h1 {
+    font-size: var(--text-lg);
+    line-height: var(--text-lg-line);
+    font-weight: var(--text-weight-bold);
+  }
+
+  & button {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background: var(--color-bg-action);
+    color: var(--color-text-on-bg-action);
+    border-radius: var(--border-radius);
+
+    &:hover {
+      background: var(--color-bg-action-hover);
     }
   }
 }

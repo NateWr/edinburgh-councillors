@@ -1,22 +1,33 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
     --color-bg: #fff;
     --color-bg-reverse: #191919;
     --color-text: rgba(0, 0, 0, 0.8);
+    --color-text-light: rgb(55 65 81);
     --color-text-on-bg-reverse: #fff;
     --color-link: #B50A00;
     --color-link-light: #E87D78;
 
     --color-bg-action: var(--color-link);
+    --color-bg-action-hover: #ff554b;
     --color-text-on-bg-action: #fff;
 
     --color-bg-accent: #ffc46b;
     --color-text-on-accent: var(--color-text);
 
-    --font-family: 'Work Sans', sans-serif;
+    --font-family: 'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --text-xs: 0.75rem;
+    --text-xs-line: 1rem;
+    --text-sm: 0.875rem;
+    --text-sm-line: 1.25rem;
+    --text-base: 1rem;
+    --text-base-line: 1.5rem;
+    --text-lg: 1.125rem;
+    --text-lg-line: 1.75rem;
+    --text-xl: 1.25rem;
+    --text-xl-line: 1.75rem;
+    --text-weight-normal: 400;
+    --text-weight-semibold: 600;
+    --text-weight-bold: 700;
 
     --input-border: 2px solid var(--color-link-light);
     --border-radius: 0.25rem;

@@ -1,3 +1,11 @@
+<script>
+export default {
+    props: {
+        disabled: Boolean,
+    }
+}
+</script>
+
 <template>
     <component
         :is="disabled ? 'button' : 'a'"
@@ -7,14 +15,6 @@
         <slot />
     </component>
 </template>
-
-<script>
-export default {
-    props: {
-        disabled: Boolean,
-    }
-}
-</script>
 
 <style lang="postcss">
 @import '../assets/css/variables.css';
@@ -29,11 +29,11 @@ export default {
     background: transparent;
     border: none;
 
-    svg {
+    & svg {
         width: 0.75rem;
         height: auto;
 
-        path {
+        & path {
             fill: var(--color-text-on-bg-action);
         }
     }
@@ -43,7 +43,7 @@ export default {
     }
 
     &:hover {
-        background: #ff554b;
+        background: var(--color-bg-action-hover);
     }
 
     &:focus {
@@ -65,7 +65,7 @@ export default {
 .ec-councillor-action:disabled {
     background: #cab0b0;
 
-    path {
+    & path {
         fill: #ae7470;
     }
 
