@@ -269,8 +269,10 @@ export default {
           <ec-logo href="#" />
         </div>
         <div class="search">
-          <ec-search v-model:search="postcode"/>
-          <p>{{ this.warning }}</p>
+          <ec-search
+            v-model:search="postcode"
+            :warning="warning"
+          />
         </div>
       </div>
       <div

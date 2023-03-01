@@ -1,6 +1,6 @@
 <script>
 export default {
-  props: ['search'],
+  props: ['search', 'warning'],
   emits: ['update:search'],
 }
 </script>
@@ -17,6 +17,9 @@ export default {
       :value="search"
       @input="$emit('update:search', $event.target.value)"
     >
+    <div v-if="warning" class="ec-warning">
+      {{ this.warning }}
+    </div>
   </div>
 </template>
 
@@ -59,6 +62,31 @@ export default {
 .ec-search:focus-within {
   svg path {
     fill: var(--color-link);
+  }
+}
+
+.ec-warning {
+  position: absolute;
+  top: 100%;
+  left: 1.5rem;
+  margin-top: 0.25rem;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.2em;
+  color: var(--color-text-on-bg-action);
+  background: var(--color-bg-action);
+  border-radius: var(--border-radius);
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 0.5rem;
+    width: 0;
+    height: 0;
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
+    border-bottom: 0.5rem solid var(--color-bg-action);
   }
 }
 </style>
