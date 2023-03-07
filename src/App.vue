@@ -115,6 +115,11 @@ export default {
       this.showWard(wardLayer);
       this.showPostcode(record.Postcode, record.Latitude, record.Longitude);
 
+      const $input = this.$el.querySelector('input[name="search"]');
+      if ($input) {
+        $input.blur();
+      }
+
     }, 250),
 
     showWard(layer) {
