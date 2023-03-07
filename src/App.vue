@@ -186,7 +186,7 @@ export default {
       iconAnchor: [30, 60],
     });
 
-    fetch(config.councillorsUrl)
+    fetch(import.meta.env.BASE_URL + config.councillorsUrl)
       .then(r => r.json())
       .then(r => {
         this.wards = r;
@@ -195,7 +195,7 @@ export default {
         alert('An unexpected error occurred. Unable to load the ward councillors.');
       });
 
-    fetch(config.postcodesUrl)
+    fetch(import.meta.env.BASE_URL + config.postcodesUrl)
       .then(r => r.text())
       .then(r => {
         postcodes = parse(r, {
@@ -207,7 +207,7 @@ export default {
         alert('An unexpected error occurred. Unable to load postcodes.');
       });
 
-    fetch(config.map.boundariesUrl)
+    fetch(import.meta.env.BASE_URL + config.map.boundariesUrl)
       .then(r => r.json())
       .then(r => {
         leaflet.geoJSON(

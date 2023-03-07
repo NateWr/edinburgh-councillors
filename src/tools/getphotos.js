@@ -53,7 +53,7 @@ wards.forEach(ward => {
   ward.councillors.forEach(councillor => {
     const url = councillor.photo;
     const filename = councillor.name.replace(/[^a-z0-9]/gi, '-').toLowerCase() + '.jpg';
-    councillor.photo = '/images/' + filename;
+    councillor.photo = 'images/' + filename;
     download(url, './src/photos/'  + filename)
       .then(() => {
         const image = sharp('./src/photos/' + filename);
