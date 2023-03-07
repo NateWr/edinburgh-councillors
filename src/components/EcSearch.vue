@@ -65,6 +65,7 @@ export default {
 
 .ec-warning {
   position: absolute;
+  z-index: 1;
   top: 100%;
   left: 1.5rem;
   margin-top: 0.25rem;
