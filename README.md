@@ -2,7 +2,7 @@
 
 This is a small app to find your ward councillors for the city of Edinburgh, Scotland. View the [live demo](https://natewr.github.io/edinburgh-councillors/).
 
-[![Screenshot of the app](./screenshot.png)](https://natewr.github.io/edinburgh-councillors/)
+[![Screenshot of the app](./public/preview-image.png)](https://natewr.github.io/edinburgh-councillors/)
 
 I built this as a quick sample for my portfolio using:
 
