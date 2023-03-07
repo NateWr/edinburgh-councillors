@@ -272,7 +272,7 @@ export default {
     <div class="controls" ref="controls">
       <div class="header">
         <div class="logo">
-          <ec-logo href="#" />
+          <ec-logo @click="started = false" />
         </div>
         <div class="search">
           <ec-search
@@ -298,14 +298,14 @@ export default {
       </div>
     </div>
     <div id="map" class="map" />
-    <div v-if="started" class="modal__bg">
+    <div v-if="!started" class="modal__bg">
       <div class="modal">
         <h1>
           👋 Hiya!
         </h1>
         <p>
           This is a little something I made for my portfolio
-           in early 2023. The data may be out of date. Find your current ward councillors on
+           in early 2023. The data may be out of date. Find your current ward councillors at
           <a href="https://democracy.edinburgh.gov.uk/mgMemberIndex.aspx" target="_blank" rel="noopener noreferrer">edinburgh.gov.uk</a>.
         </p>
         <p>
@@ -431,16 +431,26 @@ a {
     font-weight: var(--text-weight-bold);
   }
 
+  & p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
   & button {
     display: block;
     width: 100%;
     padding: 0.5rem 1rem;
     background: var(--color-bg-action);
     color: var(--color-text-on-bg-action);
+    border: none;
     border-radius: var(--border-radius);
 
     &:hover {
       background: var(--color-bg-action-hover);
+    }
+
+    &:focus {
+      outline-offset: 2px;
     }
   }
 }
