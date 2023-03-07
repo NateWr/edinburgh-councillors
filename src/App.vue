@@ -414,7 +414,7 @@ a {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
-  z-index: 1;
+  z-index: 3;
 }
 
 .modal {
@@ -432,13 +432,14 @@ a {
   }
 
   & p {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
   }
 
   & button {
     display: block;
     width: 100%;
+    margin-top: 3rem;
     padding: 0.5rem 1rem;
     background: var(--color-bg-action);
     color: var(--color-text-on-bg-action);
@@ -475,7 +476,7 @@ a {
   .header {
     position: fixed;
     display: flex;
-    z-index: 1;
+    z-index: 2;
     width: var(--sidebar-min-width);
     height: 4rem;
   }

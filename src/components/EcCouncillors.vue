@@ -34,9 +34,9 @@ export default {
           :src="councillor.photo ?? '/images/councillor-no-portrait.png'"
         />
         <div class="ec-councillor-details">
-          <h3 class="ec-councillor-name">
+          <h4 class="ec-councillor-name">
             {{ councillor.name }}
-          </h3>
+          </h4>
           <div class="ec-councillor-party">
             {{ councillor.party }}
           </div>
