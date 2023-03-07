@@ -38,7 +38,7 @@ export default {
         }
     }
 
-    + .ec-councillor-action {
+    & + .ec-councillor-action {
         border-left: 1px solid #db3228;
     }
 
