@@ -41,8 +41,8 @@ export default {
   & svg {
     position: absolute;
     top: 50%;
-    left: 0.75rem;
-    width: 1rem;
+    left: 0.5rem;
+    width: 0.75rem;
     height: auto;
     transform: translateY(-50%);
 
@@ -53,11 +53,12 @@ export default {
 
   & input {
     width: 100%;
-    padding: 0.5rem 0 0.5rem 2rem;
+    padding: 0.5rem 0 0.5rem 1.5rem;
     border: var(--input-border);
     border-radius: var(--input-radius);
     background: transparent;
     color: var(--input-color);
+    font-size: var(--text-sm);
     font-family: var(--font-family);
     -webkit-appearance: none; /* hide search icon in Safari */
   }
@@ -96,6 +97,23 @@ export default {
     border-left: 0.5rem solid transparent;
     border-right: 0.5rem solid transparent;
     border-bottom: 0.5rem solid var(--color-bg-action);
+  }
+}
+
+@media (min-width: 320px) {
+
+  .ec-search {
+
+    & svg {
+      left: 0.75rem;
+      width: 1rem;
+    }
+
+    & input {
+      padding-left: 2rem;
+      font-size: var(--text-base);
+    }
+
   }
 }
 </style>

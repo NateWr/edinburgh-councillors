@@ -360,14 +360,15 @@ a {
   height: 4rem;
   background: var(--color-bg);
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
 }
 
 .logo {
   height: 3.5rem;
   margin: 0.25rem;
-  margin-inline-end: auto;
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 
 .councillors {
