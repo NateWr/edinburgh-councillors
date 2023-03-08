@@ -1,5 +1,5 @@
 /**
- * These tests check the performance of the application.
+ * Test the critical functionality of the application
  */
 describe('Application tests', () => {
 
