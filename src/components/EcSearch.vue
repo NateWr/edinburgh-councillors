@@ -59,6 +59,7 @@ export default {
     background: transparent;
     color: var(--input-color);
     font-family: var(--font-family);
+    -webkit-appearance: none; /* hide search icon in Safari */
   }
 
   &:hover input,
