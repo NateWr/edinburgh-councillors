@@ -124,7 +124,6 @@ export default {
 
     showWard(layer) {
       this.clearHighlighted();
-      window.console.log(layer);
       this.currentWardId = layer.feature.properties.Ward_Code;
       map.fitBounds(layer.getBounds());
       this.scrollToCouncillors(layer.feature.properties.Ward_Name);
