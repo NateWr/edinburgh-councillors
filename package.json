@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "data": "npx cypress run; node ./src/tools/getphotos.js; spd-say done"
+    "tests": "npx cypress run --spec cypress/e2e/app.cy.js",
+    "data": "npx cypress run --spec cypress/e2e/councillors.cy.js; node ./src/tools/getphotos.js; spd-say done"
   },
   "dependencies": {
     "csv-parse": "^5.3.5",
